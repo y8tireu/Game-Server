@@ -6,24 +6,26 @@ const socketIo = require('socket.io');
 const app = express();
 const server = http.createServer(app);
 
-// Configure Socket.IO with custom ping settings.
+// Configure Socket.IO with low ping interval and low ping timeout,
+// and force WebSocket transport for lower latency.
 const io = socketIo(server, {
   cors: { origin: "*" },
-  pingInterval: 20000, // send a ping every 20 seconds
-  pingTimeout: 60000   // if no pong is received in 60 seconds, disconnect
+  pingInterval: 10000, // send a ping every 10 seconds
+  pingTimeout: 15000,  // wait 15 seconds for a pong before disconnecting
+  transports: ['websocket']
 });
 
 let players = {};
 
 io.on('connection', (socket) => {
   console.log('New client connected:', socket.id);
-  // Optionally, send back the unique id to the client.
+  // Optionally, send the unique id to the client.
   socket.emit('your_id', socket.id);
 
   socket.on('player_update', (data) => {
-    // Store this player's latest data.
+    // Update this player's data.
     players[socket.id] = data;
-    // Broadcast the full players object to all connected clients.
+    // Broadcast the updated players object to all connected clients.
     io.emit('player_update', players);
   });
 
@@ -34,7 +36,7 @@ io.on('connection', (socket) => {
   });
 });
 
-// Serve static files (if you have an index.html or dashboard) from the "public" folder.
+// (Optional) Serve static files from the "public" folder if you have one.
 app.use(express.static('public'));
 
 const PORT = process.env.PORT || 3000;
