@@ -1,0 +1,21 @@
+{
+  "name": "platformer-server",
+  "version": "1.0.0",
+  "description": "A Node.js server for a multiplayer platformer game using Express and Socket.IO.",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js"
+  },
+  "keywords": [
+    "platformer",
+    "multiplayer",
+    "express",
+    "socket.io"
+  ],
+  "author": "Your Name",
+  "license": "MIT",
+  "dependencies": {
+    "express": "^4.18.2",
+    "socket.io": "^4.6.1"
+  }
+}
